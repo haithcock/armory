@@ -1,19 +1,17 @@
-// armoryRoutes.js
 const express = require('express');
 const router = express.Router();
 const armoryController = require('../controllers/armoryController');
-const { isAuthenticated } = require('../config/authMiddleware');
 
 /**
  * @swagger
  * tags:
  *   name: Armory
- *   description: Armory item management endpoints
+ *   description: Armory item management
  */
 
 /**
  * @swagger
- * /armory/:
+ * /armory:
  *   get:
  *     summary: Get all armory items
  *     tags: [Armory]
@@ -28,21 +26,15 @@ const { isAuthenticated } = require('../config/authMiddleware');
  *                 $ref: '#/components/schemas/ArmoryItem'
  *       500:
  *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/', armoryController.getAllItems);
 
 /**
  * @swagger
- * /armory/:
+ * /armory:
  *   post:
  *     summary: Create a new armory item
  *     tags: [Armory]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     requestBody:
  *       required: true
  *       content:
@@ -57,23 +49,11 @@ router.get('/', armoryController.getAllItems);
  *             schema:
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
- *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       401:
- *         description: Unauthorized
+ *         description: Invalid input
  *       500:
  *         description: Server error
  */
-router.post(
-  '/',
-  isAuthenticated,
-  armoryController.itemValidationRules,
-  armoryController.validateItem, 
-  armoryController.createItem
-);
+router.post('/', armoryController.createItem);
 
 /**
  * @swagger
@@ -81,8 +61,6 @@ router.post(
  *   put:
  *     summary: Update an armory item
  *     tags: [Armory]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     parameters:
  *       - in: path
  *         name: id
@@ -104,21 +82,13 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
- *         description: Validation error
+ *         description: Invalid input
  *       404:
  *         description: Item not found
- *       401:
- *         description: Unauthorized
  *       500:
  *         description: Server error
  */
-router.put(
-  '/:id',
-  isAuthenticated,
-  armoryController.itemValidationRules,
-  armoryController.validateItem,
-  armoryController.updateItem
-);
+router.put('/:id', armoryController.updateItem);
 
 /**
  * @swagger
@@ -126,8 +96,6 @@ router.put(
  *   delete:
  *     summary: Delete an armory item
  *     tags: [Armory]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     parameters:
  *       - in: path
  *         name: id
@@ -138,25 +106,11 @@ router.put(
  *     responses:
  *       200:
  *         description: Item deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Item deleted successfully
  *       404:
  *         description: Item not found
- *       401:
- *         description: Unauthorized
  *       500:
  *         description: Server error
  */
-router.delete(
-  '/:id',
-  isAuthenticated,
-  armoryController.deleteItem
-);
+router.delete('/:id', armoryController.deleteItem);
 
 module.exports = router;

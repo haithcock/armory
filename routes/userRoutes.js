@@ -1,27 +1,20 @@
-// userRoutes.js
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { isAuthenticated, isAdmin } = require('../config/authMiddleware'); 
-
-// Apply authentication middleware to all user routes
-router.use(isAuthenticated, isAdmin);
 
 /**
  * @swagger
  * tags:
  *   name: Users
- *   description: User management endpoints
+ *   description: User management
  */
 
 /**
  * @swagger
- * /users/:
+ * /users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     responses:
  *       200:
  *         description: List of users
@@ -31,10 +24,6 @@ router.use(isAuthenticated, isAdmin);
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden (admin only)
  *       500:
  *         description: Server error
  */
@@ -42,12 +31,10 @@ router.get('/', userController.getAllUsers);
 
 /**
  * @swagger
- * /users/:
+ * /users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     requestBody:
  *       required: true
  *       content:
@@ -62,24 +49,11 @@ router.get('/', userController.getAllUsers);
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Validation error or duplicate email
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden (admin only)
+ *         description: Invalid input
  *       500:
  *         description: Server error
  */
-router.post(
-  '/',
-  userController.userValidationRules,
-  userController.validateUser,
-  userController.createUser
-);
+router.post('/', userController.createUser);
 
 /**
  * @swagger
@@ -87,8 +61,6 @@ router.post(
  *   put:
  *     summary: Update a user
  *     tags: [Users]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     parameters:
  *       - in: path
  *         name: id
@@ -110,22 +82,13 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         description: Validation error
+ *         description: Invalid input
  *       404:
  *         description: User not found
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden (admin only)
  *       500:
  *         description: Server error
  */
-router.put(
-  '/:id',
-  userController.userValidationRules,
-  userController.validateUser,
-  userController.updateUser
-);
+router.put('/:id', userController.updateUser);
 
 /**
  * @swagger
@@ -133,8 +96,6 @@ router.put(
  *   delete:
  *     summary: Delete a user
  *     tags: [Users]
- *     security:
- *       - OAuth2: ['email', 'profile']
  *     parameters:
  *       - in: path
  *         name: id
@@ -145,20 +106,8 @@ router.put(
  *     responses:
  *       200:
  *         description: User deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User deleted successfully
  *       404:
  *         description: User not found
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden (admin only)
  *       500:
  *         description: Server error
  */
