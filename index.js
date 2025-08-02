@@ -33,11 +33,14 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-app.use('/api/users', userRoutes);
-app.use('/api/armory', armoryRoutes);
+app.use('/users', userRoutes);
+app.use('/armory', armoryRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  explorer: true, // Enable explorer
   swaggerOptions: {
+    persistAuthorization: true, // Keep auth between refreshes
+    tryItOutEnabled: true, // Enable "Try it out" feature
     oauth: {
       clientId: process.env.GOOGLE_CLIENT_ID,
       scopes: ['profile', 'email'],
