@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const authMiddleware = require('../middleware/authMiddleware');
+
 
 /**
  * @swagger
@@ -13,6 +15,8 @@ const userController = require('../controllers/userController');
  * @swagger
  * /users:
  *   get:
+ *  security:
+ *  - OAuth2: [email, profile]
  *     summary: Get all users
  *     tags: [Users]
  *     responses:
@@ -24,15 +28,20 @@ const userController = require('../controllers/userController');
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
+ * 
+ *      401:
+ *       description: Unauthorized user
  *       500:
  *         description: Server error
  */
-router.get('/', userController.getAllUsers);
+router.get('/', authMiddleware.ensureAuthenticated, userController.getAllUsers);
 
 /**
  * @swagger
  * /users:
  *   post:
+ *  security:
+ * - OAuth2: [email, profile]
  *     summary: Create a new user
  *     tags: [Users]
  *     requestBody:
@@ -50,15 +59,19 @@ router.get('/', userController.getAllUsers);
  *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid input
+ *     401:
+ *       description: Unauthorized user
  *       500:
  *         description: Server error
  */
-router.post('/', userController.createUser);
+router.post('/', authMiddleware.ensureAuthenticated, userController.createUser);
 
 /**
  * @swagger
  * /users/{id}:
  *   put:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Update a user
  *     tags: [Users]
  *     parameters:
@@ -83,17 +96,21 @@ router.post('/', userController.createUser);
  *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid input
- *       404:
+ *      401:
+ *       description: Unauthorized user     
+ *  404:
  *         description: User not found
  *       500:
  *         description: Server error
  */
-router.put('/:id', userController.updateUser);
+router.put('/:id', authMiddleware.ensureAuthenticated, userController.updateUser);
 
 /**
  * @swagger
  * /users/{id}:
  *   delete:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Delete a user
  *     tags: [Users]
  *     parameters:
@@ -106,11 +123,13 @@ router.put('/:id', userController.updateUser);
  *     responses:
  *       200:
  *         description: User deleted successfully
+ *        401:
+ *        description: Unauthorized user
  *       404:
  *         description: User not found
  *       500:
  *         description: Server error
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', authMiddleware.ensureAuthenticated, userController.deleteUser);
 
 module.exports = router;

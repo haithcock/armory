@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const armoryController = require('../controllers/armoryController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 /**
  * @swagger
@@ -13,6 +14,8 @@ const armoryController = require('../controllers/armoryController');
  * @swagger
  * /armory:
  *   get:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Get all armory items
  *     tags: [Armory]
  *     responses:
@@ -24,15 +27,19 @@ const armoryController = require('../controllers/armoryController');
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/ArmoryItem'
+ *      401:
+ *        description: Unauthorized user
  *       500:
  *         description: Server error
  */
-router.get('/', armoryController.getAllItems);
+router.get('/', authMiddleware.ensureAuthenticated, armoryController.getAllItems);
 
 /**
  * @swagger
  * /armory:
  *   post:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Create a new armory item
  *     tags: [Armory]
  *     requestBody:
@@ -50,15 +57,19 @@ router.get('/', armoryController.getAllItems);
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
  *         description: Invalid input
+ *     401:
+ *        description: Unauthorized user
  *       500:
  *         description: Server error
  */
-router.post('/', armoryController.createItem);
+router.post('/', authMiddleware.ensureAuthenticated, armoryController.createItem);
 
 /**
  * @swagger
  * /armory/{id}:
  *   put:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Update an armory item
  *     tags: [Armory]
  *     parameters:
@@ -83,17 +94,21 @@ router.post('/', armoryController.createItem);
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
  *         description: Invalid input
+ *     401: 
+ *       description: Unauthorized user
  *       404:
  *         description: Item not found
  *       500:
  *         description: Server error
  */
-router.put('/:id', armoryController.updateItem);
+router.put('/:id', authMiddleware.ensureAuthenticated, armoryController.updateItem);
 
 /**
  * @swagger
  * /armory/{id}:
  *   delete:
+ * security:
+ * - OAuth2: [email, profile]
  *     summary: Delete an armory item
  *     tags: [Armory]
  *     parameters:
@@ -106,11 +121,13 @@ router.put('/:id', armoryController.updateItem);
  *     responses:
  *       200:
  *         description: Item deleted successfully
+ *        401:
+ *        description: Unauthorized user
  *       404:
  *         description: Item not found
  *       500:
  *         description: Server error
  */
-router.delete('/:id', armoryController.deleteItem);
+router.delete('/:id', authMiddleware.ensureAuthenticated, armoryController.deleteItem);
 
 module.exports = router;
