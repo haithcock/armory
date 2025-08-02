@@ -2,7 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const { isAuthenticated, isAdmin } = require('../config/authMiddleware'); 
 
+router.use(isAuthenticated, isAdmin);
 // Apply validation middleware to POST/PUT routes
 router.get('/', userController.getAllUsers);
 router.post(
