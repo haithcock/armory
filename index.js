@@ -8,7 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const armoryRoutes = require('./routes/armoryRoutes');
 const app = express();
 app.use(express.json());
-
+//test
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
