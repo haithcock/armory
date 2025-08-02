@@ -16,7 +16,7 @@ const options = {
         description: 'Development server' 
       },
       { 
-        url: 'https://your-production-url.com', 
+        url: 'https://armory-wj0k.onrender.com', 
         description: 'Production server' 
       }
     ],
