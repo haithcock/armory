@@ -30,13 +30,13 @@ const options = {
         ArmoryItem: {
           type: 'object',
           properties: {
-            name: { type: 'string', example: 'AR-15' },
+            name: { type: 'string', example: 'AR-47' },
             caliber: { type: 'string', example: '7.62x39' },
             type: { type: 'string', example: 'Rifle' },
             manufacturer: { type: 'string', example: 'DIY' },
             round_count: { type: 'integer', example: 30 },
             last_cleaned: { type: 'string', format: 'date-time', example: '2023-10-01T12:00:00Z' },
-            notes: { type: 'string', example: 'Custom modifications' }
+            notes: { type: 'string', example: 'Uses banana mags' }
           }
         },
         User: {
