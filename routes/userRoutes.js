@@ -42,7 +42,7 @@ router.get('/', userController.getAllUsers);
 
 /**
  * @swagger
- * users:
+ * /users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -83,7 +83,7 @@ router.post(
 
 /**
  * @swagger
- * users/{id}:
+ * /users/{id}:
  *   put:
  *     summary: Update a user
  *     tags: [Users]
@@ -129,7 +129,7 @@ router.put(
 
 /**
  * @swagger
- * users/{id}:
+ * /users/{id}:
  *   delete:
  *     summary: Delete a user
  *     tags: [Users]

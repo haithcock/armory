@@ -25,7 +25,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport'); 
 
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
 
 //test
 // MongoDB Connection
