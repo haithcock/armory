@@ -13,12 +13,12 @@ exports.getAllItems = async (req, res) => {
 
 // Validation rules for create/update
 exports.itemValidationRules = [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('caliber').notEmpty().withMessage('Caliber is required'),
-  body('type').notEmpty().withMessage('Type is required'),
-  body('manufacturer').notEmpty().withMessage('Manufacturer is required'),
-  body('round_count').isInt({ min: 0 }).withMessage('Round count must be non-negative integer'),
-  body('last_cleaned').isISO8601().withMessage('Invalid date format (use ISO 8601)')
+  body('name').optional().notEmpty().withMessage('Name is required'),
+  body('caliber').optional().notEmpty().withMessage('Caliber is required'),
+  body('type').optional().notEmpty().withMessage('Type is required'),
+  body('manufacturer').optional().notEmpty().withMessage('Manufacturer is required'),
+  body('round_count').optional().isInt({ min: 0 }).withMessage('Round count must be non-negative integer'),
+  body('last_cleaned').optional().isISO8601().withMessage('Invalid date format (use ISO 8601)')
 ];
 
 // Handle validation errors
@@ -52,11 +52,21 @@ exports.createItem = async (req, res) => {
 // Update item
 exports.updateItem = async (req, res) => {
   try {
+    const updates = {};
+    const allowedFields = ['name', 'caliber', 'type', 'manufacturer', 'round_count', 'last_cleaned', 'notes'];
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
     const updatedItem = await ArmoryItem.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true }
+      updates,
+      { new: true, runValidators: true }
     );
+    
     if (!updatedItem) return res.status(404).json({ message: "Item not found" });
     res.json(updatedItem);
   } catch (err) {

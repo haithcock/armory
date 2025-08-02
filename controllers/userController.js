@@ -13,9 +13,9 @@ exports.getAllUsers = async (req, res) => {
 
 // Validation rules for create/update
 exports.userValidationRules = [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Invalid email format'),
-  body('role').isIn(['admin', 'user']).withMessage('Invalid role')
+  body('name').optional().notEmpty().withMessage('Name is required'),
+  body('email').optional().isEmail().withMessage('Invalid email format'),
+  body('role').optional().isIn(['admin', 'user']).withMessage('Invalid role')
 ];
 
 // Handle validation errors
@@ -49,18 +49,34 @@ exports.createUser = async (req, res) => {
 // Update user
 exports.updateUser = async (req, res) => {
   try {
+    const updates = {};
+    const allowedFields = ['name', 'email', 'role'];
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
+    if (updates.email) {
+      const existingUser = await User.findOne({ email: updates.email });
+      if (existingUser && existingUser._id.toString() !== req.params.id) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true }
+      updates,
+      { new: true, runValidators: true }
     );
+    
     if (!updatedUser) return res.status(404).json({ message: "User not found" });
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-
 // Delete user
 exports.deleteUser = async (req, res) => {
   try {
