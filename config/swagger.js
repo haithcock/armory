@@ -10,8 +10,8 @@ const options = {
       description: 'API for managing armory items and users',
     },
 servers: [
-  { url: 'http://localhost:5000/', description: 'Development server' },
-  { url: 'https://armory-api.onrender.com/', description: 'Production server' }
+  { url: 'http://localhost:5000', description: 'Development server' },
+  { url: 'https://armory-api.onrender.com', description: 'Production server' }
 ],
     components: {
       securitySchemes: {
