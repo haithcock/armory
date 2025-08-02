@@ -5,7 +5,7 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
+
 const path = require('path');
 const app = express();
 
