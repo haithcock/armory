@@ -16,7 +16,7 @@ router.use(isAuthenticated, isAdmin);
 
 /**
  * @swagger
- * /users:
+ * /users/:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
@@ -42,7 +42,7 @@ router.get('/', userController.getAllUsers);
 
 /**
  * @swagger
- * /users:
+ * /users/:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
