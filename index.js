@@ -7,8 +7,7 @@ const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const app = express();
-const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./swagger-output.json'); 
+
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
@@ -54,7 +53,7 @@ app.use('/users', userRoutes);
 app.use('/armory', armoryRoutes);
 
 // Swagger UI - Add with other routes
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, {
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   swaggerOptions: {
     persistAuthorization: true,
