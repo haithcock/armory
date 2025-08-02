@@ -76,17 +76,9 @@ servers: [
     }
   },
 
-  apis: [
-    'armory/routes/armoryRoutes.js',
-    'armory/routes/authRoutes.js',
-    'armory/routes/userRoutes.js',
-    'armory/controllers/armoryController.js',
-    'armory/controllers/userController.js',
-    'armory/controllers/authController.js',
-    'armory/models/User.js',
-    'armory/models/ArmoryItem.js',
-    'armory/config/swagger.js'
-  ],
+apis: [
+  './routes/*.js' // Simple pattern to find all route files
+],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
