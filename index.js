@@ -22,7 +22,9 @@ app.use(session({
   saveUninitialized: false
 }));
 app.use(passport.initialize());
+
 app.use(passport.session());
+
 require('./config/passport'); 
 
 app.use('/auth', authRoutes);
@@ -34,6 +36,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.use('/users', userRoutes);
+
 app.use('/armory', armoryRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
