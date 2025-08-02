@@ -7,7 +7,26 @@ const ArmoryItem = require('./models/ArmoryItem');
 const userRoutes = require('./routes/userRoutes');
 const armoryRoutes = require('./routes/armoryRoutes');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+const session = require('express-session');
+const passport = require('passport');
+const authRoutes = require('./routes/authRoutes');
+
+
 app.use(express.json());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport'); 
+
+app.use('/api/auth', authRoutes);
+
 //test
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -16,6 +35,16 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/api/users', userRoutes);
 app.use('/api/armory', armoryRoutes);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  swaggerOptions: {
+    oauth: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      scopes: ['profile', 'email'],
+      usePkceWithAuthorizationCodeGrant: true
+    }
+  }
+}));
 
 // Test route
 app.get('/', (req, res) => res.send('API Running'));
