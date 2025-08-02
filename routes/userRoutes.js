@@ -16,7 +16,7 @@ router.use(isAuthenticated, isAdmin);
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
@@ -42,7 +42,7 @@ router.get('/', userController.getAllUsers);
 
 /**
  * @swagger
- * /api/users:
+ * users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -83,7 +83,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/{id}:
+ * users/{id}:
  *   put:
  *     summary: Update a user
  *     tags: [Users]
@@ -129,7 +129,7 @@ router.put(
 
 /**
  * @swagger
- * /api/users/{id}:
+ * users/{id}:
  *   delete:
  *     summary: Delete a user
  *     tags: [Users]

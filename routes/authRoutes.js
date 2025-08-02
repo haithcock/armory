@@ -11,7 +11,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/auth/google:
+ * /auth/google:
  *   get:
  *     summary: Initiate Google OAuth login
  *     tags: [Authentication]
@@ -29,7 +29,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 
 /**
  * @swagger
- * /api/auth/google/callback:
+ * /auth/google/callback:
  *   get:
  *     summary: Google OAuth callback
  *     tags: [Authentication]
@@ -46,7 +46,7 @@ router.get('/google/callback',
 
 /**
  * @swagger
- * /api/auth/success:
+ * /auth/success:
  *   get:
  *     summary: Check authentication status
  *     tags: [Authentication]
@@ -82,7 +82,7 @@ router.get('/success', (req, res) => {
 
 /**
  * @swagger
- * /api/auth/logout:
+ * /auth/logout:
  *   get:
  *     summary: Log out current user
  *     tags: [Authentication]

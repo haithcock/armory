@@ -13,7 +13,7 @@ const { isAuthenticated } = require('../config/authMiddleware');
 
 /**
  * @swagger
- * /api/armory:
+ * /armory:
  *   get:
  *     summary: Get all armory items
  *     tags: [Armory]
@@ -37,7 +37,7 @@ router.get('/', armoryController.getAllItems);
 
 /**
  * @swagger
- * /api/armory:
+ * /armory:
  *   post:
  *     summary: Create a new armory item
  *     tags: [Armory]
@@ -77,7 +77,7 @@ router.post(
 
 /**
  * @swagger
- * /api/armory/{id}:
+ * /armory/{id}:
  *   put:
  *     summary: Update an armory item
  *     tags: [Armory]
@@ -122,7 +122,7 @@ router.put(
 
 /**
  * @swagger
- * /api/armory/{id}:
+ * /armory/{id}:
  *   delete:
  *     summary: Delete an armory item
  *     tags: [Armory]
