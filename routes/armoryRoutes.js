@@ -5,17 +5,10 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 /**
  * @swagger
- * tags:
- *   name: Armory
- *   description: Armory item management
- */
-
-/**
- * @swagger
  * /armory:
  *   get:
- * security:
- * - OAuth2: [email, profile]
+ *     security:
+ *       - OAuth2: [email, profile]
  *     summary: Get all armory items
  *     tags: [Armory]
  *     responses:
@@ -27,8 +20,6 @@ const authMiddleware = require('../middleware/authMiddleware');
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/ArmoryItem'
- *      401:
- *        description: Unauthorized user
  *       500:
  *         description: Server error
  */
@@ -38,8 +29,8 @@ router.get('/', authMiddleware.ensureAuthenticated, armoryController.getAllItems
  * @swagger
  * /armory:
  *   post:
- * security:
- * - OAuth2: [email, profile]
+ *     security:
+ *       - OAuth2: [email, profile]
  *     summary: Create a new armory item
  *     tags: [Armory]
  *     requestBody:
@@ -57,8 +48,6 @@ router.get('/', authMiddleware.ensureAuthenticated, armoryController.getAllItems
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
  *         description: Invalid input
- *     401:
- *        description: Unauthorized user
  *       500:
  *         description: Server error
  */
@@ -68,8 +57,8 @@ router.post('/', authMiddleware.ensureAuthenticated, armoryController.createItem
  * @swagger
  * /armory/{id}:
  *   put:
- * security:
- * - OAuth2: [email, profile]
+ *     security:
+ *       - OAuth2: [email, profile]
  *     summary: Update an armory item
  *     tags: [Armory]
  *     parameters:
@@ -94,8 +83,6 @@ router.post('/', authMiddleware.ensureAuthenticated, armoryController.createItem
  *               $ref: '#/components/schemas/ArmoryItem'
  *       400:
  *         description: Invalid input
- *     401: 
- *       description: Unauthorized user
  *       404:
  *         description: Item not found
  *       500:
@@ -107,8 +94,8 @@ router.put('/:id', authMiddleware.ensureAuthenticated, armoryController.updateIt
  * @swagger
  * /armory/{id}:
  *   delete:
- * security:
- * - OAuth2: [email, profile]
+ *     security:
+ *       - OAuth2: [email, profile]
  *     summary: Delete an armory item
  *     tags: [Armory]
  *     parameters:
@@ -121,8 +108,6 @@ router.put('/:id', authMiddleware.ensureAuthenticated, armoryController.updateIt
  *     responses:
  *       200:
  *         description: Item deleted successfully
- *        401:
- *        description: Unauthorized user
  *       404:
  *         description: Item not found
  *       500:
