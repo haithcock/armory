@@ -6,8 +6,30 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swaggerDef');
 
 module.exports = function(app) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-};
+ app.use('/api-docs', swaggerUi.serve, (req, res, next) => {
+  const token = req.query.token;
+
+  const options = {
+    swaggerOptions: {
+      authAction: token
+        ? {
+            bearerAuth: {
+              name: 'bearerAuth',
+              schema: {
+                type: 'http',
+                in: 'header',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+              },
+              value: `Bearer ${token}`,
+            },
+          }
+        : undefined,
+    },
+  };
+
+  swaggerUi.setup(require('./swaggerDef'), options)(req, res, next);
+});
 
 const doc = {
   info: {
