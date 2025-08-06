@@ -1,6 +1,6 @@
 exports.isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) return next();
-  res.status(401).json({ message: 'Unauthorized' });
+  if (req.isAuthenticated()) return next(); // Session check
+  passport.authenticate('bearer', { session: false })(req, res, next); // Bearer token check
 };
 
 exports.isAdmin = (req, res, next) => {

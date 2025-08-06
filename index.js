@@ -6,6 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const swaggerUi = require('swagger-ui-express');
 
+
 const path = require('path');
 const app = express();
 
@@ -26,21 +27,20 @@ if (isProduction) {
 
 // CORS Configuration
 app.use(cors({
-  origin: isProduction ? process.env.CORS_ORIGIN : 'http://localhost:3000',
+  origin: true,
   credentials: true
 }));
 
 app.use(express.json());
 
-// Session Configuration
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
@@ -59,6 +59,7 @@ app.use('/armory', armoryRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   swaggerOptions: {
+    withCredentials: true,
     persistAuthorization: true,
     oauth: {
       clientId: process.env.GOOGLE_CLIENT_ID,
