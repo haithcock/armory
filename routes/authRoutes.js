@@ -39,9 +39,15 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  *       500:
  *         description: Server error
  */
+
 router.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => res.redirect('/auth/success')
+  (req, res) => {
+    // Save session explicitly before redirect
+    req.session.save(() => {
+      res.redirect('/api-docs'); // Redirect to Swagger UI
+    });
+  }
 );
 
 /**
