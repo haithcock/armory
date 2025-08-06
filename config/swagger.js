@@ -2,6 +2,13 @@
 // swagger.js
 const swaggerAutogen = require('swagger-autogen')();
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swaggerDef');
+
+module.exports = function(app) {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+};
+
 const doc = {
   info: {
     title: 'Armory API',

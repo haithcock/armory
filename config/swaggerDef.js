@@ -76,5 +76,38 @@ const options = {
   ], 
 };
 
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Armory API',
+    version: '1.0.0',
+    description: 'API documentation for the Armory project',
+  },
+  servers: [
+    {
+      url: 'http://localhost:3000',
+      description: 'Local development server',
+    },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+};
+
+
+
+
 const swaggerSpec = swaggerJSDoc(options);
-module.exports = swaggerSpec;
+
+module.exports = swaggerSpec, swaggerDefinition;
