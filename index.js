@@ -46,10 +46,10 @@ app.use(session({
 }));
 
 // Passport middleware
-app.use(passport.initialize());
+/*app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport');
-
+*/
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);

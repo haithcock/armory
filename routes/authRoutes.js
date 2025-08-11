@@ -1,28 +1,36 @@
+// routes/authRoutes.js
 const express = require('express');
-const router = express.Router();
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const router = express.Router();
 
-
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
-
-
-router.get(
-  '/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  (req, res) => {
-
-    if (!req.user) return res.status(401).json({ message: 'User not found after login' });
-
-    const token = jwt.sign(
-      { id: req.user.id, username: req.user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-
-    res.redirect(`/api-docs?token=${token}`);
+// ADD THIS ROUTE FOR LOGIN (generates tokens)
+router.post('/login', (req, res) => {
+  // Replace with your real user authentication
+  const { username, password } = req.body;
+  
+  if (username === 'admin' && password === 'password') {
+    const user = { id: 1, name: "Admin" };
+    
+    // Generate tokens
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+    
+    res.json({ accessToken, refreshToken });
+  } else {
+    res.sendStatus(401);
   }
-);
+});
+
+// ADD THIS ROUTE FOR TOKEN REFRESH
+router.post('/token', (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) return res.sendStatus(401);
+  
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const accessToken = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+    res.json({ accessToken });
+  });
+});
 
 module.exports = router;

@@ -34,7 +34,7 @@ module.exports = function(app) {
       title: 'Armory API',
       description: 'API for managing armory items and users',
     },
-    host: 'localhost:3000',
+    host: 'localhost:5000',
     schemes: ['http'],
     tags: [
       { name: 'Armory', description: 'Armory item operations' },

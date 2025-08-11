@@ -1,28 +1,30 @@
+// config/passport.js
 const passport = require('passport');
-const GitHubStrategy = require('passport-github2').Strategy;
-const jwt = require('jsonwebtoken');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+const callbackURL = `${process.env.BASE_URL}${process.env.OAUTH_CALLBACK_PATH}`; // e.g., http://localhost:5000/auth/google/callback
 
-const users = {}; 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      // Minimal user object; in real apps, look up/create in DB.
+      const user = {
+        id: profile.id,
+        displayName: profile.displayName,
+        email: profile.emails?.[0]?.value || null,
+        photo: profile.photos?.[0]?.value || null,
+      };
+      return done(null, user);
+    }
+  )
+);
 
-passport.use(new GitHubStrategy({
-  clientID: process.env.GITHUB_CLIENT_ID,
-  clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: '/auth/github/callback',
-}, (accessToken, refreshToken, profile, done) => {
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((obj, done) => done(null, obj));
 
-  users[profile.id] = {
-    id: profile.id,
-    username: profile.username,
-    email: profile.emails?.[0]?.value || null,
-  };
-  return done(null, users[profile.id]);
-}));
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  done(null, users[id]);
-});
+module.exports = passport;

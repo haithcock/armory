@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const armoryController = require('../controllers/armoryController');
 const authMiddleware = require('../middleware/authMiddleware');
+const verifyToken = require('../middleware/auth');
 
 /**
  * @swagger
